@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin :: head('Destinations')}"></head>
+<body class="admin-body">
+<aside th:replace="~{fragments/admin :: sidebar('categories')}"></aside>
+<div class="admin-main">
+    <header th:replace="~{fragments/admin :: topbar('Destinations')}"></header>
+    <div class="admin-content">
+
+        <div th:if="${toast}" class="toast success" th:text="${toast}"></div>
+        <div th:if="${error}" class="toast error" th:text="${error}"></div>
+
+        <div class="two-col">
+            <!-- Add new category -->
+            <div class="admin-card">
+                <div class="admin-card-head"><h2>Add destination</h2></div>
+                <form th:action="@{/admin/categories/save}" method="post" class="admin-form">
+                    <div class="form-group">
+                        <label>Name <span class="req">*</span></label>
+                        <input type="text" name="name" required placeholder="e.g. Iran">
+                    </div>
+                    <div class="form-group">
+                        <label>Icon (emoji)</label>
+                        <input type="text" name="icon" placeholder="🇮🇷" maxlength="4">
+                        <p class="form-hint">Add an emoji (a flag works nicely) to show next to the name.</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">➕ Add</button>
+                </form>
+            </div>
+
+            <!-- List -->
+            <div class="admin-card">
+                <div class="admin-card-head"><h2>Existing destinations</h2></div>
+                <table class="admin-table" th:if="${categories != null and !categories.isEmpty()}">
+                    <thead>
+                    <tr><th>Icon</th><th>Name</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${categories}">
+                        <td style="font-size:22px" th:text="${c.icon}">🎁</td>
+                        <td th:text="${c.name}">Place</td>
+                        <td class="actions-cell">
+                            <button type="button" class="btn btn-ghost btn-sm"
+                                    th:attr="data-id=${c.id},data-name=${c.name},data-icon=${c.icon}"
+                                    onclick="editCategory(this)">Edit</button>
+                            <form th:action="@{/admin/categories/delete/{id}(id=${c.id})}" method="post"
+                                  onsubmit="return confirm('Delete this destination? Products in it will become uncategorized.');"
+                                  style="display:inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="empty-state" th:if="${categories == null or categories.isEmpty()}">No destinations yet.</p>
+            </div>
+        </div>
+
+        <!-- Edit dialog (simple) -->
+        <div class="admin-card" id="editCard" style="display:none">
+            <div class="admin-card-head"><h2>Edit destination</h2></div>
+            <form th:action="@{/admin/categories/save}" method="post" class="admin-form">
+                <input type="hidden" name="id" id="editId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Icon</label>
+                        <input type="text" name="icon" id="editIcon" maxlength="4">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Save changes</button>
+                    <button type="button" class="btn btn-ghost" onclick="document.getElementById('editCard').style.display='none'">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/main.js}"></script>
+<script>
+    function editCategory(btn) {
+        document.getElementById('editId').value = btn.getAttribute('data-id');
+        document.getElementById('editName').value = btn.getAttribute('data-name');
+        document.getElementById('editIcon').value = btn.getAttribute('data-icon');
+        var card = document.getElementById('editCard');
+        card.style.display = 'block';
+        card.scrollIntoView({behavior: 'smooth'});
+    }
+</script>
+</body>
+</html>

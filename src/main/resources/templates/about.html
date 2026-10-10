@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('About')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <section class="page-head">
+        <div class="container"><h1 class="page-title">About us</h1></div>
+    </section>
+
+    <section class="section">
+        <div class="container about-layout">
+            <div class="about-text card">
+                <span class="about-emoji" th:text="${shop.logoEmoji}">🧳</span>
+                <h2 th:text="${shop.shopName}">Souvenirs</h2>
+                <p class="about-tag" th:text="${shop.tagline}">Bring the world home</p>
+                <p th:text="${shop.aboutText}">About text</p>
+            </div>
+
+            <div class="about-features">
+                <div class="feature card">
+                    <span class="feature-icon">🌍</span>
+                    <h3>Authentic &amp; local</h3>
+                    <p>Real souvenirs sourced from their place of origin.</p>
+                </div>
+                <div class="feature card">
+                    <span class="feature-icon">🚚</span>
+                    <h3>Safe delivery</h3>
+                    <p>Carefully packaged and shipped worldwide.</p>
+                </div>
+                <div class="feature card">
+                    <span class="feature-icon">💬</span>
+                    <h3>Friendly support</h3>
+                    <p>We're always happy to answer your questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

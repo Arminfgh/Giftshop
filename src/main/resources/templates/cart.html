@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cart')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <section class="page-head">
+        <div class="container"><h1 class="page-title">Your cart</h1></div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div th:if="${toast}" class="toast success" th:text="${toast}"></div>
+
+            <div th:if="${items == null or items.isEmpty()}" class="empty-state big">
+                <span class="empty-emoji">🛒</span>
+                <p>Your cart is empty.</p>
+                <a class="btn btn-primary" th:href="@{/shop}">Start shopping</a>
+            </div>
+
+            <div th:if="${items != null and !items.isEmpty()}" class="cart-layout">
+                <div class="cart-items">
+                    <div class="cart-row" th:each="item : ${items}">
+                        <div class="cart-thumb">
+                            <img th:if="${item.imageUrl != null and item.imageUrl != ''}" th:src="${item.imageUrl}" th:alt="${item.name}">
+                            <div th:unless="${item.imageUrl != null and item.imageUrl != ''}" class="media-placeholder small"><span>🎁</span></div>
+                        </div>
+                        <div class="cart-info">
+                            <a class="cart-name" th:href="@{/product/{id}(id=${item.productId})}" th:text="${item.name}">Name</a>
+                            <span class="cart-unit" th:text="|${shop.currency}${#numbers.formatInteger(item.price,0,'COMMA')}|"></span>
+                        </div>
+                        <form class="cart-qty" th:action="@{/cart/update}" method="post">
+                            <input type="hidden" name="productId" th:value="${item.productId}">
+                            <div class="qty-control">
+                                <button type="submit" class="qty-btn" name="quantity" th:value="${item.quantity - 1}">−</button>
+                                <span class="qty-value" th:text="${item.quantity}">1</span>
+                                <button type="submit" class="qty-btn" name="quantity" th:value="${item.quantity + 1}">+</button>
+                            </div>
+                        </form>
+                        <div class="cart-line-total" th:text="|${shop.currency}${#numbers.formatInteger(item.lineTotal,0,'COMMA')}|"></div>
+                        <form th:action="@{/cart/remove}" method="post">
+                            <input type="hidden" name="productId" th:value="${item.productId}">
+                            <button type="submit" class="cart-remove" aria-label="Remove">✕</button>
+                        </form>
+                    </div>
+                </div>
+
+                <aside class="cart-summary">
+                    <h3>Order summary</h3>
+                    <div class="summary-row">
+                        <span>Total</span>
+                        <strong th:text="|${shop.currency}${#numbers.formatInteger(total,0,'COMMA')}|">$0</strong>
+                    </div>
+                    <p class="summary-note" th:if="${shop.shippingNote != ''}" th:text="${shop.shippingNote}"></p>
+                    <a class="btn btn-primary btn-block btn-lg" th:href="@{/checkout}">Proceed to checkout</a>
+                    <a class="btn btn-ghost btn-block" th:href="@{/shop}">Continue shopping</a>
+                </aside>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

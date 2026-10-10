@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${product.name})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a th:href="@{/}">Home</a> /
+                <a th:href="@{/shop}">Shop</a> /
+                <span th:text="${product.name}">Product</span>
+            </nav>
+
+            <div class="product-detail">
+                <div class="detail-media">
+                    <img th:if="${product.imageUrl != null and product.imageUrl != ''}"
+                         th:src="${product.imageUrl}" th:alt="${product.name}">
+                    <div th:unless="${product.imageUrl != null and product.imageUrl != ''}" class="media-placeholder large">
+                        <span th:text="${product.category != null ? product.category.icon : '🎁'}">🎁</span>
+                    </div>
+                </div>
+
+                <div class="detail-info">
+                    <span class="card-cat" th:if="${product.category != null}" th:text="${product.category.name}">Place</span>
+                    <h1 class="detail-title" th:text="${product.name}">Product name</h1>
+
+                    <div class="detail-price">
+                        <span class="price-now big" th:text="|${shop.currency}${#numbers.formatInteger(product.price,0,'COMMA')}|">$0</span>
+                        <span class="price-old" th:if="${product.discounted}"
+                              th:text="|${shop.currency}${#numbers.formatInteger(product.oldPrice,0,'COMMA')}|"></span>
+                    </div>
+
+                    <p class="detail-desc" th:text="${product.description}">Product description</p>
+
+                    <p class="stock-info" th:if="${product.stock != null and product.stock > 0}">
+                        ✅ In stock
+                    </p>
+                    <p class="stock-info out" th:if="${product.stock == null or product.stock <= 0}">
+                        ⛔ Out of stock
+                    </p>
+
+                    <form th:action="@{/cart/add}" method="post" class="detail-buy"
+                          th:if="${product.stock != null and product.stock > 0}">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        <div class="qty-control">
+                            <button type="button" class="qty-btn" data-action="minus">−</button>
+                            <input type="number" name="quantity" value="1" min="1" class="qty-input">
+                            <button type="button" class="qty-btn" data-action="plus">+</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Add to cart 🛒</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Related -->
+            <div th:if="${relatedProducts != null and !relatedProducts.isEmpty()}">
+                <div class="section-head" style="margin-top:48px">
+                    <h2 class="section-title">You may also like</h2>
+                </div>
+                <div class="product-grid">
+                    <th:block th:each="p : ${relatedProducts}"><div th:replace="~{fragments/components :: productCard(${p})}"></div></th:block>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

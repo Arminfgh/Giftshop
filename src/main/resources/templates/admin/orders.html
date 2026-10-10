@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin :: head('Orders')}"></head>
+<body class="admin-body">
+<aside th:replace="~{fragments/admin :: sidebar('orders')}"></aside>
+<div class="admin-main">
+    <header th:replace="~{fragments/admin :: topbar('Orders')}"></header>
+    <div class="admin-content">
+
+        <div th:if="${toast}" class="toast success" th:text="${toast}"></div>
+        <div th:if="${error}" class="toast error" th:text="${error}"></div>
+
+        <div class="admin-card">
+            <div class="admin-card-head"><h2>All orders</h2></div>
+
+            <table class="admin-table" th:if="${orders != null and !orders.isEmpty()}">
+                <thead>
+                <tr>
+                    <th>No.</th><th>Customer</th><th>Phone</th>
+                    <th>Amount</th><th>Date</th><th>Status</th><th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${orders}">
+                    <td th:text="${o.id}">1</td>
+                    <td th:text="${o.customerName}">Customer</td>
+                    <td th:text="${o.phone}">Phone</td>
+                    <td th:text="|${shop.currency}${#numbers.formatInteger(o.totalAmount,0,'COMMA')}|"></td>
+                    <td th:text="${#temporals.format(o.createdAt, 'yyyy-MM-dd HH:mm')}">Date</td>
+                    <td><span class="status-pill" th:classappend="'st-' + ${o.status}" th:text="${o.statusLabel}"></span></td>
+                    <td class="actions-cell">
+                        <a class="btn btn-outline btn-sm" th:href="@{/admin/orders/{id}(id=${o.id})}">View</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="empty-state" th:if="${orders == null or orders.isEmpty()}">
+                <span class="empty-emoji">🧾</span>
+                <p>No orders yet.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

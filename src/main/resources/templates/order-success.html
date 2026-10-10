@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Order placed')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <div class="success-box card">
+                <span class="success-emoji">🎉</span>
+                <h1>Your order has been placed!</h1>
+                <p>Order number: <strong th:text="${order.id}">1</strong></p>
+                <p>Thank you, <strong th:text="${order.customerName}">customer</strong>. We'll contact you shortly to confirm.</p>
+
+                <div class="success-summary">
+                    <div class="summary-item" th:each="item : ${order.items}">
+                        <span th:text="${item.productName} + ' × ' + ${item.quantity}">Name × 1</span>
+                        <span th:text="|${shop.currency}${#numbers.formatInteger(item.lineTotal,0,'COMMA')}|"></span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <strong th:text="|${shop.currency}${#numbers.formatInteger(order.totalAmount,0,'COMMA')}|"></strong>
+                    </div>
+                </div>
+
+                <a class="btn btn-primary btn-lg" th:href="@{/shop}">Continue shopping</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

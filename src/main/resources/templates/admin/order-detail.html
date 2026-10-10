@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin :: head('Order details')}"></head>
+<body class="admin-body">
+<aside th:replace="~{fragments/admin :: sidebar('orders')}"></aside>
+<div class="admin-main">
+    <header th:replace="~{fragments/admin :: topbar('Order details')}"></header>
+    <div class="admin-content">
+
+        <div th:if="${toast}" class="toast success" th:text="${toast}"></div>
+
+        <a class="btn btn-ghost btn-sm" th:href="@{/admin/orders}">← Back to orders</a>
+
+        <div class="two-col" style="margin-top:16px">
+            <!-- Order info -->
+            <div class="admin-card">
+                <div class="admin-card-head">
+                    <h2 th:text="'Order #' + ${order.id}">Order</h2>
+                    <span class="status-pill" th:classappend="'st-' + ${order.status}" th:text="${order.statusLabel}"></span>
+                </div>
+                <div class="detail-rows">
+                    <div class="detail-line"><span>Customer:</span> <strong th:text="${order.customerName}"></strong></div>
+                    <div class="detail-line"><span>Phone:</span> <strong th:text="${order.phone}"></strong></div>
+                    <div class="detail-line"><span>Address:</span> <strong th:text="${order.address != null and order.address != '' ? order.address : '—'}"></strong></div>
+                    <div class="detail-line"><span>Notes:</span> <strong th:text="${order.note != null and order.note != '' ? order.note : '—'}"></strong></div>
+                    <div class="detail-line"><span>Date:</span> <strong th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></strong></div>
+                </div>
+            </div>
+
+            <!-- Status update -->
+            <div class="admin-card">
+                <div class="admin-card-head"><h2>Update status</h2></div>
+                <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post" class="admin-form">
+                    <div class="form-group">
+                        <label>Order status</label>
+                        <select name="status" class="select">
+                            <option value="NEW" th:selected="${order.status == 'NEW'}">New</option>
+                            <option value="PROCESSING" th:selected="${order.status == 'PROCESSING'}">Processing</option>
+                            <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">Shipped</option>
+                            <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">Delivered</option>
+                            <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">Cancelled</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">💾 Update status</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Items -->
+        <div class="admin-card">
+            <div class="admin-card-head"><h2>Order items</h2></div>
+            <table class="admin-table">
+                <thead>
+                <tr><th>Product</th><th>Unit price</th><th>Qty</th><th>Total</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td th:text="${item.productName}">Name</td>
+                    <td th:text="|${shop.currency}${#numbers.formatInteger(item.price,0,'COMMA')}|"></td>
+                    <td th:text="${item.quantity}">1</td>
+                    <td th:text="|${shop.currency}${#numbers.formatInteger(item.lineTotal,0,'COMMA')}|"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align:right"><strong>Total</strong></td>
+                    <td><strong th:text="|${shop.currency}${#numbers.formatInteger(order.totalAmount,0,'COMMA')}|"></strong></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

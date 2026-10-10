@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-inner">
+            <div class="hero-text">
+                <span class="hero-eyebrow" th:text="${shop.tagline}">Bring the world home</span>
+                <h1 class="hero-title" th:text="${shop.heroTitle}">Authentic souvenirs from around the world</h1>
+                <p class="hero-sub" th:text="${shop.heroSubtitle}">Shop description</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary btn-lg" th:href="@{/shop}">Browse the shop</a>
+                    <a class="btn btn-outline btn-lg" th:href="@{/about}">About us</a>
+                </div>
+                <p class="hero-note" th:if="${shop.shippingNote != ''}" th:text="${shop.shippingNote}"></p>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <div class="gift-box">
+                    <span class="gift-emoji" th:text="${shop.logoEmoji}">🧳</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="section" th:if="${navCategories != null and !navCategories.isEmpty()}">
+        <div class="container">
+            <div class="section-head">
+                <h2 class="section-title">Shop by destination</h2>
+                <a class="section-link" th:href="@{/shop}">All products →</a>
+            </div>
+            <div class="category-grid">
+                <a class="category-chip" th:each="cat : ${navCategories}"
+                   th:href="@{/shop(category=${cat.id})}">
+                    <span class="chip-icon" th:text="${cat.icon}">🎁</span>
+                    <span class="chip-name" th:text="${cat.name}">Place</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED -->
+    <section class="section section-alt" th:if="${featuredProducts != null and !featuredProducts.isEmpty()}">
+        <div class="container">
+            <div class="section-head">
+                <h2 class="section-title">Featured souvenirs</h2>
+                <a class="section-link" th:href="@{/shop}">View all →</a>
+            </div>
+            <div class="product-grid">
+                <th:block th:each="p : ${featuredProducts}"><div th:replace="~{fragments/components :: productCard(${p})}"></div></th:block>
+            </div>
+        </div>
+    </section>
+
+    <!-- LATEST -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <h2 class="section-title">New arrivals</h2>
+                <a class="section-link" th:href="@{/shop}">View all →</a>
+            </div>
+            <div class="product-grid" th:if="${latestProducts != null and !latestProducts.isEmpty()}">
+                <th:block th:each="p : ${latestProducts}"><div th:replace="~{fragments/components :: productCard(${p})}"></div></th:block>
+            </div>
+            <p class="empty-state" th:if="${latestProducts == null or latestProducts.isEmpty()}">
+                No products have been added yet.
+            </p>
+        </div>
+    </section>
+
+    <!-- FEATURES STRIP -->
+    <section class="section features">
+        <div class="container features-grid">
+            <div class="feature">
+                <span class="feature-icon">🌍</span>
+                <h3>From around the world</h3>
+                <p>Authentic souvenirs handpicked from their place of origin.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎀</span>
+                <h3>Beautiful packaging</h3>
+                <p>Every item is wrapped with care, ready to gift.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🚚</span>
+                <h3>Worldwide shipping</h3>
+                <p>We deliver your treasures safely to your door.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">💬</span>
+                <h3>Friendly support</h3>
+                <p>We're here to help at every step of your order.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

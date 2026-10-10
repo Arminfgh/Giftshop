@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin :: head('Dashboard')}"></head>
+<body class="admin-body">
+<aside th:replace="~{fragments/admin :: sidebar('dashboard')}"></aside>
+<div class="admin-main">
+    <header th:replace="~{fragments/admin :: topbar('Dashboard')}"></header>
+    <div class="admin-content">
+
+        <div th:if="${toast}" class="toast success" th:text="${toast}"></div>
+
+        <div class="stat-grid">
+            <a class="stat-card" th:href="@{/admin/products}">
+                <span class="stat-icon">📦</span>
+                <span class="stat-num" th:text="${productCount}">0</span>
+                <span class="stat-label">Products</span>
+            </a>
+            <a class="stat-card" th:href="@{/admin/orders}">
+                <span class="stat-icon">🧾</span>
+                <span class="stat-num" th:text="${orderCount}">0</span>
+                <span class="stat-label">Orders</span>
+            </a>
+            <a class="stat-card highlight" th:href="@{/admin/orders}">
+                <span class="stat-icon">🆕</span>
+                <span class="stat-num" th:text="${newOrderCount}">0</span>
+                <span class="stat-label">New orders</span>
+            </a>
+            <a class="stat-card" th:href="@{/admin/messages}">
+                <span class="stat-icon">✉️</span>
+                <span class="stat-num" th:text="${unreadCount}">0</span>
+                <span class="stat-label">Unread messages</span>
+            </a>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-card-head">
+                <h2>Recent orders</h2>
+                <a class="btn btn-outline btn-sm" th:href="@{/admin/orders}">View all</a>
+            </div>
+            <table class="admin-table" th:if="${recentOrders != null and !recentOrders.isEmpty()}">
+                <thead>
+                <tr><th>No.</th><th>Customer</th><th>Amount</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${recentOrders}">
+                    <td th:text="${o.id}">1</td>
+                    <td th:text="${o.customerName}">Customer</td>
+                    <td th:text="|${shop.currency}${#numbers.formatInteger(o.totalAmount,0,'COMMA')}|"></td>
+                    <td><span class="status-pill" th:classappend="'st-' + ${o.status}" th:text="${o.statusLabel}"></span></td>
+                    <td><a class="btn btn-ghost btn-sm" th:href="@{/admin/orders/{id}(id=${o.id})}">Details</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="empty-state" th:if="${recentOrders == null or recentOrders.isEmpty()}">No orders yet.</p>
+        </div>
+
+        <div class="quick-actions">
+            <a class="btn btn-primary" th:href="@{/admin/products/new}">➕ Add new product</a>
+            <a class="btn btn-outline" th:href="@{/admin/settings}">⚙️ Shop settings</a>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

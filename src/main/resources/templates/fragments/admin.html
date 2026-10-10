@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | Admin — ' + ${shop.shopName}">Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside th:fragment="sidebar(active)" class="admin-sidebar" id="adminSidebar">
+    <a class="admin-brand" th:href="@{/admin/dashboard}">
+        <span th:text="${shop.logoEmoji}">🧳</span>
+        <span>Admin Panel</span>
+    </a>
+    <nav class="admin-nav">
+        <a th:href="@{/admin/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'">📊 Dashboard</a>
+        <a th:href="@{/admin/products}" th:classappend="${active == 'products'} ? 'active'">📦 Products</a>
+        <a th:href="@{/admin/categories}" th:classappend="${active == 'categories'} ? 'active'">🏷️ Destinations</a>
+        <a th:href="@{/admin/orders}" th:classappend="${active == 'orders'} ? 'active'">🧾 Orders</a>
+        <a th:href="@{/admin/messages}" th:classappend="${active == 'messages'} ? 'active'">✉️ Messages</a>
+        <a th:href="@{/admin/settings}" th:classappend="${active == 'settings'} ? 'active'">⚙️ Settings</a>
+    </nav>
+    <div class="admin-nav-bottom">
+        <a th:href="@{/}" target="_blank">🌐 View site</a>
+        <a th:href="@{/admin/logout}" class="logout">🚪 Log out</a>
+    </div>
+</aside>
+
+<!-- Topbar -->
+<header th:fragment="topbar(title)" class="admin-topbar">
+    <button class="admin-menu-toggle" id="adminMenuToggle" aria-label="Menu">☰</button>
+    <h1 th:text="${title}">Title</h1>
+    <a class="btn btn-ghost" th:href="@{/}" target="_blank">View site ↗</a>
+</header>
+
+</body>
+</html>

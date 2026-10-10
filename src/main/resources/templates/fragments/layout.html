@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title != null ? title + ' | ' + shop.shopName : shop.shopName}">Souvenirs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml">
+</head>
+
+<body>
+<!-- ============ HEADER ============ -->
+<header th:fragment="header" class="site-header">
+    <div class="container header-inner">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-emoji" th:text="${shop.logoEmoji}">🧳</span>
+            <span class="brand-name" th:text="${shop.shopName}">Souvenirs</span>
+        </a>
+
+        <nav class="main-nav" id="mainNav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/shop}">Shop</a>
+            <a th:href="@{/about}">About</a>
+            <a th:href="@{/contact}">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <a class="cart-link" th:href="@{/cart}" aria-label="Cart">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-badge" th:if="${cartCount > 0}" th:text="${cartCount}">0</span>
+            </a>
+            <a class="btn btn-ghost admin-link" th:href="@{/admin}">Admin</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+        </div>
+    </div>
+</header>
+
+<!-- ============ FOOTER ============ -->
+<footer th:fragment="footer" class="site-footer">
+    <div class="container footer-grid">
+        <div class="footer-col">
+            <div class="brand footer-brand">
+                <span class="brand-emoji" th:text="${shop.logoEmoji}">🧳</span>
+                <span class="brand-name" th:text="${shop.shopName}">Souvenirs</span>
+            </div>
+            <p class="footer-tag" th:text="${shop.tagline}">Bring the world home</p>
+            <p class="footer-text" th:text="${shop.footerText}"></p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/shop}">Shop</a>
+            <a th:href="@{/about}">About</a>
+            <a th:href="@{/contact}">Contact</a>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <p th:if="${shop.phone != ''}">📞 <span th:text="${shop.phone}"></span></p>
+            <p th:if="${shop.email != ''}">✉️ <span th:text="${shop.email}"></span></p>
+            <p th:if="${shop.address != ''}">📍 <span th:text="${shop.address}"></span></p>
+            <p th:if="${shop.workingHours != ''}">🕘 <span th:text="${shop.workingHours}"></span></p>
+            <div class="socials">
+                <a th:if="${shop.instagram != ''}" th:href="${shop.instagram}" target="_blank" rel="noopener">Instagram</a>
+                <a th:if="${shop.telegram != ''}" th:href="${shop.telegram}" target="_blank" rel="noopener">Telegram</a>
+                <a th:if="${shop.whatsapp != ''}" th:href="${shop.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <span>&copy; <span th:text="${shop.shopName}">Souvenirs</span> — All rights reserved.</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

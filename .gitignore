@@ -1,0 +1,26 @@
+# Compiled output
+target/
+build/
+*.class
+
+# Database files (created automatically when you run the app)
+data/
+
+# Uploaded images (keep the folder, ignore its contents)
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS
+.DS_Store
+Thumbs.db

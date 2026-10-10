@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Admin login | ' + ${shop.shopName}">Admin login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-page">
+<div class="login-card">
+    <div class="login-logo" th:text="${shop.logoEmoji}">🧳</div>
+    <h1>Admin Login</h1>
+    <p class="login-sub" th:text="${shop.shopName}">Souvenirs</p>
+
+    <div th:if="${error}" class="toast error" th:text="${error}"></div>
+
+    <form th:action="@{/admin/login}" method="post">
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
+    </form>
+
+    <a class="login-back" th:href="@{/}">← Back to shop</a>
+</div>
+</body>
+</html>

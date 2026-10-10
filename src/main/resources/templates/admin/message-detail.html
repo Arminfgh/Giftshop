@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin :: head('Message')}"></head>
+<body class="admin-body">
+<aside th:replace="~{fragments/admin :: sidebar('messages')}"></aside>
+<div class="admin-main">
+    <header th:replace="~{fragments/admin :: topbar('View message')}"></header>
+    <div class="admin-content">
+
+        <a class="btn btn-ghost btn-sm" th:href="@{/admin/messages}">← Back to messages</a>
+
+        <div class="admin-card" style="margin-top:16px">
+            <div class="admin-card-head">
+                <h2 th:text="${msg.subject != null and msg.subject != '' ? msg.subject : 'No subject'}">Subject</h2>
+                <span class="muted-date" th:text="${#temporals.format(msg.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+            <div class="detail-rows">
+                <div class="detail-line"><span>From:</span> <strong th:text="${msg.name}"></strong></div>
+                <div class="detail-line" th:if="${msg.email != null and msg.email != ''}"><span>Email:</span> <strong th:text="${msg.email}"></strong></div>
+                <div class="detail-line" th:if="${msg.phone != null and msg.phone != ''}"><span>Phone:</span> <strong th:text="${msg.phone}"></strong></div>
+            </div>
+            <div class="message-body" th:text="${msg.content}">Message text</div>
+
+            <div class="form-actions">
+                <form th:action="@{/admin/messages/delete/{id}(id=${msg.id})}" method="post"
+                      onsubmit="return confirm('Delete this message?');">
+                    <button type="submit" class="btn btn-danger">Delete message</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

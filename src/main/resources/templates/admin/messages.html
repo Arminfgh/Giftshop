@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin :: head('Messages')}"></head>
+<body class="admin-body">
+<aside th:replace="~{fragments/admin :: sidebar('messages')}"></aside>
+<div class="admin-main">
+    <header th:replace="~{fragments/admin :: topbar('Messages')}"></header>
+    <div class="admin-content">
+
+        <div th:if="${toast}" class="toast success" th:text="${toast}"></div>
+        <div th:if="${error}" class="toast error" th:text="${error}"></div>
+
+        <div class="admin-card">
+            <div class="admin-card-head"><h2>Received messages</h2></div>
+
+            <table class="admin-table" th:if="${messages != null and !messages.isEmpty()}">
+                <thead>
+                <tr><th>Status</th><th>Name</th><th>Subject</th><th>Contact</th><th>Date</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${messages}" th:classappend="${!m.read} ? 'row-unread'">
+                    <td>
+                        <span th:if="${!m.read}" class="dot-unread" title="Unread">●</span>
+                        <span th:if="${m.read}" style="color:#bbb">✓</span>
+                    </td>
+                    <td th:text="${m.name}">Name</td>
+                    <td th:text="${m.subject != null and m.subject != '' ? m.subject : '—'}">Subject</td>
+                    <td>
+                        <span th:if="${m.phone != null and m.phone != ''}" th:text="${m.phone}"></span>
+                        <span th:if="${(m.phone == null or m.phone == '') and m.email != null and m.email != ''}" th:text="${m.email}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(m.createdAt, 'yyyy-MM-dd HH:mm')}">Date</td>
+                    <td class="actions-cell">
+                        <a class="btn btn-outline btn-sm" th:href="@{/admin/messages/{id}(id=${m.id})}">Read</a>
+                        <form th:action="@{/admin/messages/delete/{id}(id=${m.id})}" method="post"
+                              onsubmit="return confirm('Delete this message?');" style="display:inline">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="empty-state" th:if="${messages == null or messages.isEmpty()}">
+                <span class="empty-emoji">✉️</span>
+                <p>No messages yet.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

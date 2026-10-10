@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Checkout')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <section class="page-head">
+        <div class="container"><h1 class="page-title">Checkout</h1></div>
+    </section>
+
+    <section class="section">
+        <div class="container checkout-layout">
+            <form class="checkout-form card" th:action="@{/checkout}" method="post">
+                <h3>Delivery details</h3>
+                <div class="form-group">
+                    <label>Full name <span class="req">*</span></label>
+                    <input type="text" name="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone number <span class="req">*</span></label>
+                    <input type="text" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Shipping address</label>
+                    <textarea name="address" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Order notes (optional)</label>
+                    <textarea name="note" rows="2" placeholder="e.g. gift message..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Place order</button>
+                <p class="form-hint">After placing your order, it will appear in the admin panel and we'll get in touch to confirm.</p>
+            </form>
+
+            <aside class="cart-summary card">
+                <h3>Your order</h3>
+                <div class="summary-item" th:each="item : ${items}">
+                    <span th:text="${item.name} + ' × ' + ${item.quantity}">Name × 1</span>
+                    <span th:text="|${shop.currency}${#numbers.formatInteger(item.lineTotal,0,'COMMA')}|"></span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <strong th:text="|${shop.currency}${#numbers.formatInteger(total,0,'COMMA')}|">$0</strong>
+                </div>
+            </aside>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
